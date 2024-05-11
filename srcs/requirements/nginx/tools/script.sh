@@ -1,31 +1,35 @@
+#!/bin/bash
+
+
+
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out $CERTS_ -subj "/C=MO/L=KH/O=1337/OU=student/CN=sahafid.42.ma"
+
+
+echo "
 server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
+    listen 443 ssl;
+    listen [::]:443 ssl;
 
-	server_name vbachele.42.fr;
-	# On note le cert et la key (necessaire protocole ssl)
-	ssl_certificate		/etc/nginx/ssl/vbachele.crt;
-	ssl_certificate_key	/etc/nginx/ssl/vbachele.key;
+    #server_name www.$DOMAIN_NAME $DOMAIN_NAME;
 
-	# Protocole d'encryptions pour les cles ssl
-	ssl_protocols		TLSv1.2 TLSv1.3;
+    ssl_certificate $CERTS_;
+    ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;" > /etc/nginx/sites-available/default
 
-	# Fichiers a afficher et dossier ou les chercher
-	root /var/www/html;
-	index index.php index.nginx-debian.html;
 
-	# Directive necessaire pour les endpoints, 
-	# Fast cgi necessaire pour nginx pour "traduire" le php
-	location  {
-		try_files $uri $uri/ /index.php$is_args$args;
-	}
+echo '
+    ssl_protocols TLSv1.3;
 
-	location ~ \.php$ {
-		fastcgi_split_path_info ^(.+\.php)(/.+)$;
-		fastcgi_pass wordpress:9000; #PHP for wordpress will listen on the port 9000
-		fastcgi_index index.php;
-		include fastcgi_params;
-		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-		fastcgi_param SCRIPT_NAME $fastcgi_script_name;
-	}
-}
+    index index.php;
+    root /var/www/html;
+
+    location ~ [^/]\.php(/|$) { 
+            try_files $uri =404;
+            fastcgi_pass wordpress:9000;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        }
+} ' >>  /etc/nginx/sites-available/default
+
+
+nginx -g "daemon off;"
