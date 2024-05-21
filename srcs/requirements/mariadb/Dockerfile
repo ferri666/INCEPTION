@@ -3,14 +3,12 @@ FROM debian:bullseye
 
 RUN apt-get update -y && apt-get install mariadb-server -y
 
-RUN mkdir -p /var/run/mysqld \
-&& chown -R mysql:mysql /var/run/mysqld \
-&& chmod 777 /var/run/mysqld
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY tools/init.sql /etc/mysql/init.sql
 
+COPY tools/script.sh .
 
-COPY ./tools/script.sh /
+RUN mkdir /run/mysqld && chmod +x script.sh
 
-
-CMD ["/script.sh"]
+CMD ["./script.sh"]
