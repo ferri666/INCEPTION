@@ -5,8 +5,6 @@ RUN apt-get update -y && apt-get install mariadb-server -y
 
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
 
-COPY tools/init.sql /etc/mysql/init.sql
-
 COPY tools/script.sh .
 
 RUN mkdir /run/mysqld && chmod +x script.sh
