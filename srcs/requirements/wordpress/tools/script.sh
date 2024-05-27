@@ -1,12 +1,9 @@
 #!/bin/bash
 cd /var/www/html
-mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-
-mv /wp-config.php /var/www/html/wp-config.php
 
 ./wp-cli.phar core download --allow-root
 
-
+mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 mv /wp-config.php /var/www/html/wp-config.php
 
 sed -i -r "s/db1/$db_name/1"   wp-config.php
