@@ -45,17 +45,22 @@ services:
      inception:
     env_file:
      - .env
+    expose:
+     - "9000"
     restart: always
   mariadb:
     build: requirements/mariadb/.
     container_name: mariadb
     volumes:
-     - mariadb:/var/lib/mydwl
+     - mariadb:/var/lib/mysql
     networks:
      inception:
     env_file:
      - .env
+    expose:
+     - "3306"
     restart: always
 networks:
   inception:
     name: inception
+    driver: bridge

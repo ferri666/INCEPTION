@@ -13,19 +13,19 @@
 all : up
 
 up : 
-	@docker-compose -f ./srcs/docker-compose.yml up -d
+	@sudo docker-compose -f ./srcs/docker-compose.yml up -d
 
 install:
-	@docker-compose -f ./srcs/docker-compose.yml up --build
+	@sudo docker-compose -f ./srcs/docker-compose.yml up --build
 
 down : 
-	@docker-compose -f ./srcs/docker-compose.yml down
+	@sudo docker-compose -f ./srcs/docker-compose.yml down
 
 stop : 
-	@docker-compose -f ./srcs/docker-compose.yml stop
+	@sudo docker-compose -f ./srcs/docker-compose.yml stop
 
 start : 
-	@docker-compose -f ./srcs/docker-compose.yml start
+	@sudo docker-compose -f ./srcs/docker-compose.yml start
 
 status : 
-	@docker ps
+	@sudo docker ps

@@ -1,5 +1,15 @@
 #!/bin/bash
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=student/CN=ffons-ti.42.fr"
+if [ ! -f $PRIVKEY_PATH ]; then
+        openssl genpkey -algorithm RSA -out $PRIVKEY_PATH > /dev/null 2>&1
+        echo "Private key generated."
+fi
+
+if [ ! -f $CERT_PATH ]; then
+        openssl req -new -x509 -key $PRIVKEY_PATH -out $CERT_PATH -days 365 \
+            -subj "$CERT_DETAILS" > /dev/null 2>&1
+        echo "TLS certificate generated."
+fi
+
 
 nginx -g "daemon off;"
