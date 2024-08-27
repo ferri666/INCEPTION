@@ -11,5 +11,5 @@ if [ ! -f $CERT_PATH ]; then
         echo "TLS certificate generated."
 fi
 
-
+	echo "Starting Nginx ✅"
 nginx -g "daemon off;"
