@@ -7,21 +7,22 @@ volumes:
      name: wordpress
      driver: local
      driver_opts:
-        device: /home/ffons-ti/INCEPTION/srcs/web
+        device: /home/ffons-ti/data/web
         o: bind
         type: none
    mariadb:
      name: mariadb
      driver: local
      driver_opts:
-        device: /home/ffons-ti/INCEPTION/srcs/database  
+        device: /home/ffons-ti/data/database
         o: bind
         type: none
 
 services:
   nginx:
-    container_name: nginx
     build: requirements/nginx/.
+    container_name: nginx
+    image: ffons-ti_ngnix
     depends_on:
      - wordpress
      - mariadb
@@ -37,6 +38,7 @@ services:
   wordpress:
     build: requirements/wordpress/.
     container_name: wp-php
+    image: ffons-ti_wordpress
     depends_on:
      - mariadb
     volumes:
@@ -51,6 +53,7 @@ services:
   mariadb:
     build: requirements/mariadb/.
     container_name: mariadb
+    image: ffons-ti_mariadb
     volumes:
      - mariadb:/var/lib/mysql
     networks:
